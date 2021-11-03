@@ -10,7 +10,7 @@ public class StaticDictionary extends Dictionary {
     private int currentIndex = -1;
 
     @Override
-    public Word netWord() {
+    public Word nextWord() {
         currentIndex = (currentIndex + 1) % words.size();
         return new Word(words.get(currentIndex));
 

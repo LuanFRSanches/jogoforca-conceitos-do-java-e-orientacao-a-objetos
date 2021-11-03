@@ -33,7 +33,7 @@ public class FileDictionary extends Dictionary {
     }
 
     @Override
-    public Word netWord() {
+    public Word nextWord() {
         int pos = RandomUtils.newRandomNumber(0, words.size());
         return new Word(words.get(pos));
     }

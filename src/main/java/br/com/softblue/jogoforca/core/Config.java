@@ -5,23 +5,21 @@ import java.util.Properties;
 
 public class Config {
 
-    private static final Properties properties = new Properties();
+    private static Properties props = new Properties();
 
     static {
         try {
-            properties.load(Config.class.getResourceAsStream("/config.properties"));
-
+            props.load(Config.class.getResourceAsStream("/config.properties"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public static String get(String name) {
-        return properties.getProperty(name);
+        return props.getProperty(name);
     }
 
     public static void setMaxErrors(String maxErrors) {
-        properties.setProperty("maxErrors", maxErrors);
+        props.setProperty("maxErrors", maxErrors);
     }
 }

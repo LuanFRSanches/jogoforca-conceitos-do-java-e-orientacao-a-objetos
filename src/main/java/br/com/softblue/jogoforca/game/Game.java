@@ -1,33 +1,35 @@
 package br.com.softblue.jogoforca.game;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import br.com.softblue.jogoforca.core.Config;
 import br.com.softblue.jogoforca.core.Dictionary;
 import br.com.softblue.jogoforca.core.InvalidCharacterException;
 import br.com.softblue.jogoforca.core.Word;
 import br.com.softblue.jogoforca.ui.UI;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Game {
 
     public void start(String[] args) {
+        UI.print("Bem Vindo ao Jogo da Forca!");
 
-        Set<Character> useChars = new HashSet<>();
+        Dictionary dictionary = Dictionary.getInstance();
+        UI.print("Dicionário usado: " + dictionary.getName());
+
+        Word word = dictionary.nextWord();
+
+        UI.print("A palavra tem " + word.size() + " letras");
+
+        Set<Character> usedChars = new HashSet<>();
         int errorCount = 0;
+
         if (args.length > 0) {
             Config.setMaxErrors(args[0]);
         }
 
-        int maxErros = Integer.parseInt(Config.get("maxErrors"));
-        UI.print("Você pode errar no máximo " + maxErros + " vez(es)");
-        UI.print("Bem vindo ao jogo da Forca!");
-
-        Dictionary dictionary = Dictionary.getInstance();
-        Word word = dictionary.netWord();
-
-        UI.print("A palavra tem " + word.size() + " letras");
-
+        int maxErrors = Integer.parseInt(Config.get("maxErrors"));
+        UI.print("Você pode errar no máximo " + maxErrors + " vez(es)");
 
         while (true) {
             UI.print(word);
@@ -35,41 +37,38 @@ public class Game {
 
             char c;
             try {
-                c = UI.readChar("Digite uma letra: ");
-                if (useChars.contains(c)) {
+                c = UI.readChar("Digite uma letra:");
+
+                if (usedChars.contains(c)) {
                     throw new InvalidCharacterException("Esta letra já foi utilizada");
                 }
-                useChars.add(c);
+
+                usedChars.add(c);
 
                 if (word.hasChar(c)) {
-
                     UI.print("Você acertou uma letra!");
 
                 } else {
-
                     errorCount++;
-                    if (errorCount < maxErros) {
-                        UI.print(maxErros);
 
+                    if (errorCount < maxErrors) {
+                        UI.print("Você errou! Você ainda pode errar " + (maxErrors - errorCount) + " vez(es)");
                     }
                 }
+
                 UI.printNewLine();
 
                 if (word.discovered()) {
-
                     UI.print("PARABÉNS! Você acertou a palavra correta: " + word.getOriginalWord());
-                    UI.print("Fim do jogo!");
+                    UI.print("Fim do Jogo!");
                     break;
-
                 }
 
-                if (errorCount == maxErros) {
-
+                if (errorCount == maxErrors) {
                     UI.print("Você perdeu o jogo! A palavra correta era: " + word.getOriginalWord());
-                    UI.print("Fim do jogo!");
+                    UI.print("Fim do Jogo!");
                     break;
                 }
-
 
             } catch (InvalidCharacterException e) {
                 UI.print("Erro: " + e.getMessage());
@@ -77,5 +76,4 @@ public class Game {
             }
         }
     }
-
 }
