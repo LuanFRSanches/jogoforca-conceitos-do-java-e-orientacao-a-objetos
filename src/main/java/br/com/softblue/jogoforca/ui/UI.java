@@ -1,5 +1,6 @@
 package br.com.softblue.jogoforca.ui;
 
+
 import br.com.softblue.jogoforca.core.InvalidCharacterException;
 
 import java.util.Scanner;
